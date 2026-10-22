@@ -47,8 +47,22 @@ def mul(A, B):
 
     return C
 
+def calculate_z(name, m1, m2, m3, m4, m5, m6, m7):
+
+    if name == "z11":
+        return add(m1, m2)
+
+    elif name == "z12":
+        return add(add(add(m1, m3), m5), m6)
+
+    elif name == "z21":
+        return sub(add(add(m1, m6), m7), m4)
+
+    elif name == "z22":
+        return add(add(add(m1, m5), m6), m7)
+
 def cw_seq(A, B, size):
-    if size==1 :
+    if size <= 16 :
         return mul(A,B)
     
     mid = int(size/2)
@@ -77,20 +91,11 @@ def cw_seq(A, B, size):
     m6 = cw_seq(s2,t2,mid)
     m7 = cw_seq(s3,t3,mid)
 
-    z11 = add(m1, m2)
-
-    z12 = add(m1, m3)
-    z12 = add(z12, m5)
-    z12 = add(z12, m6)
-
-    z21 = add(m1, m6)
-    z21 = add(z21, m7)
-    z21 = sub(z21, m4)
-
-    z22 = add(m1, m5)
-    z22 = add(z22, m6)
-    z22 = add(z22, m7)
-
+    z11 = calculate_z("z11",m1,m2,m3,m4,m5,m6,m7)
+    z12 = calculate_z("z12",m1,m2,m3,m4,m5,m6,m7)
+    z21 = calculate_z("z21",m1,m2,m3,m4,m5,m6,m7)
+    z22 = calculate_z("z22",m1,m2,m3,m4,m5,m6,m7)
+    
     C = np.empty((size, size), dtype=np.int64)
 
     C[:mid, :mid] = z11
@@ -101,7 +106,7 @@ def cw_seq(A, B, size):
     return C
 
 def cw_multi(A, B, size, processes):
-    if size == 1:
+    if size <= 16:
         return mul(A,B)
 
     mid = int(size/2)
@@ -135,21 +140,17 @@ def cw_multi(A, B, size, processes):
     with Pool(processes=processes) as pool:
         results = pool.starmap(cw_seq, tasks)
 
-    m1, m2, m3, m4, m5, m6, m7 = results
+        m1, m2, m3, m4, m5, m6, m7 = results
+        
+    
+        z_tasks = [
+            ("z11", m1, m2, m3, m4, m5, m6, m7),
+            ("z12", m1, m2, m3, m4, m5, m6, m7),
+            ("z21", m1, m2, m3, m4, m5, m6, m7),
+            ("z22", m1, m2, m3, m4, m5, m6, m7)
+        ]
 
-    z11 = add(m1, m2)
-
-    z12 = add(m1, m3)
-    z12 = add(z12, m5)
-    z12 = add(z12, m6)
-
-    z21 = add(m1, m6)
-    z21 = add(z21, m7)
-    z21 = sub(z21, m4)
-
-    z22 = add(m1, m5)
-    z22 = add(z22, m6)
-    z22 = add(z22, m7)
+        z11, z12, z21, z22 = pool.starmap(calculate_z, z_tasks)
 
     C = np.empty((size, size), dtype=np.int64)
 
@@ -165,7 +166,6 @@ if __name__ == "__main__":
 
     sizes = [16,32,64,128,256,512,1024,2048]
     core = [1,2,3,4,5,6]
-
 
     with open("result/cw_seq.csv", "w", newline="") as file:
         writer = csv.writer(file)
@@ -213,5 +213,5 @@ if __name__ == "__main__":
                         writer.writerow([
                             p, f"G{g}", size, elapsed, total
                         ])
-    
+
                         file.flush()
