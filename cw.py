@@ -164,7 +164,7 @@ def cw_multi(A, B, size, processes):
 if __name__ == "__main__":
 
     sizes = [16,32,64,128,256,512,1024,2048]
-    core = [1,2,3,4]
+    core = [1,2,3,4,5,6]
 
 
     with open("result/cw_seq.csv", "w", newline="") as file:
