@@ -103,7 +103,9 @@ def cw_seq(A, B, size):
 
 def cw_multi(A, B, size, processes):
     if size <= 16:
-        return mul(A,B)
+        with Pool(processes=processes) as pool:
+            result = pool.starmap(mul, [(A, B)])
+        return result[0]
 
     mid = int(size/2)
 
