@@ -15,37 +15,33 @@ from pathlib import Path
 
 
 def add(A, B):
-    n = A.shape[0]
-    C = np.empty((n, n), dtype=np.int64)
-
-    for i in range(n):
-        for j in range(n):
-            C[i, j] = A[i, j] + B[i, j]
-
-    return C
+    a = A.tolist()
+    b = B.tolist()
+    c = [[x + y for x, y in zip(row_a, row_b)] for row_a, row_b in zip(a, b)]
+    return np.asarray(c, dtype=np.int64)
 
 
 def sub(A, B):
-    n = A.shape[0]
-    C = np.empty((n, n), dtype=np.int64)
-
-    for i in range(n):
-        for j in range(n):
-            C[i, j] = A[i, j] - B[i, j]
-
-    return C
+    a = A.tolist()
+    b = B.tolist()
+    c = [[x - y for x, y in zip(row_a, row_b)] for row_a, row_b in zip(a, b)]
+    return np.asarray(c, dtype=np.int64)
 
 
 def mul(A, B):
     n = A.shape[0]
-    C = np.zeros((n, n), dtype=np.int64)
-
+    a = A.tolist()
+    b = B.tolist()
+    c = [[0] * n for _ in range(n)]
+    
     for i in range(n):
         for j in range(n):
+            total = 0
             for k in range(n):
-                C[i, j] += A[i, k] * B[k, j]
+                total += a[i][k] * b[k][j]
+            c[i][j] = total
 
-    return C
+    return np.asarray(c, dtype=np.int64)
 
 def calculate_z(name, m1, m2, m3, m4, m5, m6, m7):
 
@@ -142,15 +138,11 @@ def cw_multi(A, B, size, processes):
 
         m1, m2, m3, m4, m5, m6, m7 = results
         
-    
-        z_tasks = [
-            ("z11", m1, m2, m3, m4, m5, m6, m7),
-            ("z12", m1, m2, m3, m4, m5, m6, m7),
-            ("z21", m1, m2, m3, m4, m5, m6, m7),
-            ("z22", m1, m2, m3, m4, m5, m6, m7)
-        ]
 
-        z11, z12, z21, z22 = pool.starmap(calculate_z, z_tasks)
+    z11 = calculate_z("z11",m1,m2,m3,m4,m5,m6,m7)
+    z12 = calculate_z("z12",m1,m2,m3,m4,m5,m6,m7)
+    z21 = calculate_z("z21",m1,m2,m3,m4,m5,m6,m7)
+    z22 = calculate_z("z22",m1,m2,m3,m4,m5,m6,m7)
 
     C = np.empty((size, size), dtype=np.int64)
 
@@ -166,7 +158,7 @@ if __name__ == "__main__":
 
     sizes = [16,32,64,128,256,512,1024,2048]
     core = [1,2,3,4,5,6]
-
+    
     with open("result/cw_seq.csv", "w", newline="") as file:
         writer = csv.writer(file)
 
@@ -190,7 +182,7 @@ if __name__ == "__main__":
                 ])
 
                 file.flush()
-
+    
     with open("result/cw_multi.csv", "w", newline="") as file:
             writer = csv.writer(file)
     
