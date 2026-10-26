@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-10-25T14:20:44.180480+00:00",
+  "python": "3.9.12 (main, Apr  4 2022, 05:22:27) [MSC v.1916 64 bit (AMD64)]",
+  "executable": "E:\\Miniconda3\\python.exe",
+  "platform": "Windows-10-10.0.22631-SP0",
+  "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+  "logical_cpus": 16,
+  "usable_cpus": 16,
+  "numpy": "2.0.2",
+  "start_method": "spawn",
+  "thread_limits": {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "source_sha256": {
+    "analyze.py": "e5227fb8427cfb4ea8c5c676df64e833b3b602fcb15061d0503f20df88ef5e3d",
+    "run.py": "9e750bcc63db103a986d274884fa5a2f4d53fc3e17f886035b2734ff960039aa",
+    "strassen.py": "ebf42a41d165800673bb2944b974e28e3fe88ce4afa162719e36dc889209977a"
+  },
+  "cpu_name": "AMD Ryzen 7 5800H with Radeon Graphics",
+  "physical_memory_bytes": 16474382336,
+  "available_memory_bytes": 10231279616
+}

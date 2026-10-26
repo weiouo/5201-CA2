@@ -1,0 +1,21 @@
+{
+  "groups": [
+    0,
+    1,
+    2
+  ],
+  "processes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "repeats": 1,
+  "cutoff": 32,
+  "max_size": 2048,
+  "data": "data",
+  "timing": "Input conversion, multiply and fresh Pool startup/exit included; IO/input checks/output verification excluded"
+}
