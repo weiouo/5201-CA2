@@ -1,5 +1,5 @@
 """Validate complete runs and derive the required tables without cherry-picking."""
-from common import write_json
+from run import write_json
 import argparse
 import csv
 import json
@@ -110,8 +110,6 @@ def main():
     import matplotlib.pyplot as plt
     plt.rcParams.update({'figure.dpi': 160, 'axes.grid': True, 'grid.alpha': .25})
     caveats = []
-    if config['repeats'] == 1:
-        caveats.append('Single run; timing repeatability not assessed')
     if (root / 'load_observation.json').exists():
         caveats.append('Concurrent user activity observed')
 
